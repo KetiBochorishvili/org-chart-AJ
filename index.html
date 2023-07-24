@@ -1,18 +1,776 @@
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-org-chart@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.1.2/build/d3-flextree.js"></script>
-    <div
-      class="chart-container"
-    ></div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-flextree@2.1.2/build/d3-flextree.js"></script>
+<script src="https://unpkg.com/popper.js@1"></script>
+<script src="https://unpkg.com/tippy.js@5"></script>
 
-    <script>
-      var chart;
-      d3.csv(
-        'https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv'
-      ).then(data => {
-        chart = new d3.OrgChart()
-          .container('.chart-container')
-          .data(data) 
-          .render();
-      });
-    </script>
+<script src="orgChart.js"></script>
+
+<div class="chart-container"></div>
+<style>
+  .nodeImageNameContainer {
+    border-bottom: 2px solid #E4E2E9;
+    height: 65%;
+  }
+</style>
+<script>
+
+  let dataObject = {
+    "name": "Gateway",
+    "id": 1,
+    "children": [
+
+
+      {
+        "name": "auth",
+        "id": 11,
+        "children": [
+          {
+            "name": "redis",
+            "id": 111,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 112,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 113,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+
+      {
+        "name": "auth",
+        "id": 12,
+        "children": [
+          {
+            "name": "redis",
+            "id": 121,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 122,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 123,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+
+      {
+        "name": "auth",
+        "id": 13,
+        "children": [
+          {
+            "name": "redis",
+            "id": 131,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 132,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 133,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": 14,
+        "children": [
+          {
+            "name": "redis",
+            "id": 141,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 142,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 143,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": 15,
+        "children": [
+          {
+            "name": "redis",
+            "id": 151,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 152,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 153,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": 16,
+        "children": [
+          {
+            "name": "redis",
+            "id": 161,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 162,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 163,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": 17,
+        "children": [
+          {
+            "name": "redis",
+            "id": 171,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 172,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 173,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": 18,
+        "children": [
+          {
+            "name": "redis",
+            "id": 181,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 182,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 183,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": 19,
+        "children": [
+          {
+            "name": "redis",
+            "id": 191,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 192,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": 193,
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '110a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '110a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '110a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '110a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '111a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '111a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '111a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '111a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '112a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '112a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '112a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '112a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '113a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '113a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '113a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '113a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '114a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '114a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '114a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '114a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '115a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '115a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '115a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '115a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '116a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '116a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '116a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '116a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '117a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '117a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '117a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '117a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '118a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '118a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '118a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '118a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '119a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '119a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '119a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '119a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+      {
+        "name": "auth",
+        "id": '120a',
+        "children": [
+          {
+            "name": "redis",
+            "id": '120a1',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '120a2',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          },
+          {
+            "name": "postgres",
+            "id": '120a3',
+            "children": null,
+            "attributes": {
+              "variant": "0"
+            }
+          }
+        ],
+        "attributes": {
+          "variant": "0",
+          "version": "dev"
+        }
+      },
+    ]
+  }
+
+  let flattened = d3
+    .hierarchy(dataObject)
+    .descendants()
+    .map((d) => [d.parent?.data?.id, d.data])
+    .map(([parentId, data]) => {
+      const copy = { ...data };
+      delete copy.children;
+      return { ...copy, ...{ parentId } };
+    })
+
+  flattened.forEach(element => {
+    element.imageUrl = "example.png"; // "https://raw.githubusercontent.com/bumbeishvili/Assets/master/Projects/D3/Organization%20Chart/cto.jpg"
+  });
+
+  // dataObject.children.forEach((child) => {
+  //   child.parentId = dataObject.id;
+  //   child.children.forEach((grandChild) => {
+  //     grandChild.parentId = child.id;
+  //   })
+  // })
+
+  console.log(dataObject, flattened)
+
+  // while (dataObject) {
+  //   result.push({ name: data.name, config: data.config });
+  //   data = data.prev;
+  // }
+
+
+  var chart;
+  d3.csv(
+    'https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv'
+  ).then(data => {
+
+    console.log(data)
+    chart = new OrgChart()
+      .container('.chart-container')
+      .data(flattened)
+      .nodeContent(function (d) {
+        if (d.data.parentId != undefined) {
+          return `<div style="font-size:10px;">
+          <div class='nodeImageNameContainer' style="display:flex; flex-direction:row">
+          <img src=" ${d.data.imageUrl}" style="margin-top:10px;margin-left:30px;width:60px;height:60px;" />
+            <div style="margin-left:20px; margin-top:20px; color:white;">${d.data.name}</div>
+            </div>
+            <div class="node-additional-info" style="font-size:16px; padding-top:20px; text-align:center; color:white;"> additional info </div>
+          </div>`
+        } else {
+          return `<div style=" width:${d.height}; font-size:14px;">
+            <div style=" color:white; width=${d.height}; height=${d.height}; text-align: center; margin-top:30px">${d.data.name}</div>
+          </div>`
+
+        }
+      })
+      .render();
+
+    const url = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QMaAyMA1SdmlAAAAVRJREFUeNrt26FOw2AUhuFTElzrETNLMNPtJVRVVFbtlnYXKGQFqldANo3EoLDUITazzCxBTNBk53lv4M+XJ/ndKZ52L9uft9eP+Oeqbtgs8O7+cbWO36/PiIgmwd4ojsdIU9n2l7XzNBYZNj9Eos6oTRbcdMAZAwxYgAVYgAVYgAUYsAALsAALsAALMGABFmABFmABFmABBizAAqwFgZ/fv+slHl7q3aobNpn2proujIgo276ep/HgixZgARZgARZgAQYswAIswAIswAIswIAFWIAFWIAFWIABC7AAC7AAC7D+AHZdeN97XRf6ogVYgAVYgAVYgAELsAALsAALsAADFmABFmABFmABFmDAAizAAizAAqxrYNeF973XdaEvWoAFWIAFWIAFGLAAC7AAC7AACzBgARZgARZgARZgAQYswAIswAKsW0p1m1S2/WXtPI1Fhs0nxU1Jj2yxm2sAAAAASUVORK5CYII=`;
+    const replaced = url.replace(/(\r\n|\n|\r)/gm);
+    d3.select('.svg-chart-container')
+      .style(
+        'background',
+        'radial-gradient(circle at center, #04192B 0, #000B0E 100%) url("https://raw.githubusercontent.com/bumbeishvili/coronavirus.davidb.dev/master/glow.png")'
+      )
+      .style(
+        'background-image',
+        `url(${replaced}), radial-gradient(circle at center, #1C2229 0, #1C2229 100%)`
+      );
+  });
+</script>
