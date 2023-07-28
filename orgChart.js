@@ -45,7 +45,7 @@ class OrgChart {
             imageName: 'Chart', // Configure exported PNG and SVG image name
             setActiveNodeCentered: true, // Configure if active node should be centered when expanded and collapsed
             layout: "left",// Configure layout direction , possible values are "top", "left", "right", "bottom"
-            compact: true, // Configure if compact mode is enabled , when enabled, nodes are shown in compact positions, instead of horizontal spread
+            compact: false, // Configure if compact mode is enabled , when enabled, nodes are shown in compact positions, instead of horizontal spread
             onZoomStart: d => { }, // Callback for zoom & panning start
             onZoom: d => { }, // Callback for zoom & panning 
             onZoomEnd: d => { }, // Callback for zoom & panning end
@@ -75,20 +75,14 @@ class OrgChart {
             * d=>d.data._centered - when node is centered
             */
             nodeContent: (d) => {
-                if (d.data.parentId != undefined) {
-                    return `<div style="font-size:10px;">
+                return `<div style="font-size:10px;">
                 <div class='nodeImageNameContainer' style="display:flex; flex-direction:row">
                 <img src=" ${d.data.imageUrl}" style="margin-top:10px;margin-left:30px;width:60px;height:60px;" />
                   <div style="margin-left:20px; margin-top:20px; color:white;">${d.data.name}</div>
                   </div>
                   <div class="node-additional-info" style="font-size:16px; padding-top:20px; text-align:center; color:white;"> additional info </div>
                 </div>`
-                } else {
-                    return `<div style=" width:${d.height}; font-size:14px;">
-                  <div style=" color:white; width=${d.height}; height=${d.height}; text-align: center; margin-top:30px">${d.data.name}</div>
-                </div>`
 
-                }
             },
 
             /* Node expand & collapse button content and styling. You can access same helper methods as above */
@@ -123,7 +117,7 @@ class OrgChart {
                         </svg></span><span style="margin-left:1px;color:#716E7B">${node.data._directSubordinatesPaging} </span></div>
                     `,
                 }
-                return `<div style="border:1px solid #E4E2E9;border-radius:3px;padding:3px;font-size:9px;margin:auto auto;background-color:white"> ${icons[state.layout](node.children)}  </div>`
+                return `<div style="border:1px solid #E4E2E9;border-radius:3px;padding:3px;font-size:9px;margin:auto auto;background-color:#f6f6f6"> ${icons[state.layout](node.children)}  </div>`
             },
             /* Node paging button content and styling. You can access same helper methods as above. */
             pagingButton: (d, i, arr, state) => {
@@ -151,8 +145,19 @@ class OrgChart {
             /* You can access and modify actual link DOM element in runtime using this method. */
             linkUpdate: function (d, i, arr) {
                 d3.select(this)
-                    .attr("stroke", d => d.data._upToTheRootHighlighted ? '#E27396' : '#E4E2E9')
-                    .attr("stroke-width", d => d.data._upToTheRootHighlighted ? 5 : 1)
+                    .attr("stroke", function (d) {
+                        if (d.parent.data.id == 'invisible')
+                            return 'none';
+                        else {
+                            if (attrs.theme == "dark")
+                                return d.data._upToTheRootHighlighted ? '#E27396' : '#3E454D';
+                            else
+                                return d.data._upToTheRootHighlighted ? '#E27396' : '#e4e4e4';
+                        }
+                    })
+
+
+                    .attr("stroke-width", d => d.data._upToTheRootHighlighted ? 5 : 2)
 
                 if (d.data._upToTheRootHighlighted) {
                     d3.select(this).raise()
@@ -430,8 +435,8 @@ class OrgChart {
                     "swap": d => { const x = d.x; d.x = -d.y; d.y = x; },
                     "nodeUpdateTransform": ({ x, y, width, height }) => `translate(${x - width},${y - height / 2})`,
                 },
-            }
-
+            },
+            theme: "dark",
         };
 
         this.getChartState = () => attrs;
@@ -587,8 +592,7 @@ class OrgChart {
 
         attrs.svg = svg;
 
-        // tip = d3.tip().attr('class', 'd3-tip').html(function (d) { return 'tooltip' });
-        // attrs.svg.call(tip)
+
 
 
         //Add container g element
@@ -818,13 +822,13 @@ class OrgChart {
         }
 
         const nodes = treeData.descendants();
-
         // console.table(nodes.map(d => ({ x: d.x, y: d.y, width: d.width, height: d.height, flexCompactDim: d.flexCompactDim + "" })))
 
         // Get all links
         const links = treeData.descendants().slice(1);
         nodes.forEach(attrs.layoutBindings[attrs.layout].swap)
 
+        console.log(links)
         // Connections
         const connections = attrs.connections;
         const allNodesMap = {};
@@ -984,6 +988,10 @@ class OrgChart {
             .selectAll("g.node")
             .data(nodes, ({ data }) => attrs.nodeId(data));
 
+        // const unrelatedNodesSelection = attrs.nodesWrapper
+        //     .selectAll("g.unrelatedNode")
+        //     .data(attrs.unrelatedNodesData)
+
         // Enter any new nodes at the parent's previous position.
         const nodeEnter = nodesSelection
             .enter()
@@ -1033,6 +1041,9 @@ class OrgChart {
             data: (d) => [d]
         })
             .style('overflow', 'visible')
+            .classed("node-foreign-object-dark", attrs.theme == "dark")
+            .classed("node-foreign-object-light", attrs.theme == "light")
+            .classed("root-node", function (d) { console.log(d); return d.parent?.id == "invisible" && d._children?.length > 0 })
 
         // Add foreign object
         fo.patternify({
@@ -1097,30 +1108,50 @@ class OrgChart {
                 return attrs.layoutBindings[attrs.layout].nodeUpdateTransform({ x, y, width, height });
 
             })
-            .attr("opacity", 1);
+            .attr("opacity", function (d) {
+                if (d.data.id == 'invisible')
+                    return 0;
+                else
+                    return 1;
+            });
+
+        // unrelatedNodeUpdate
+        //     .transition()
+        //     .attr("opacity", 0)
+        //     .duration(attrs.duration)
+        //     .attr("transform", function (d, i) {
+        //         if (i == 0)
+        //             return `translate(${x0},${y0 - 100})`
+        //         else
+        //             return `translate(${x0},${y0 + 100})`
+        //     })
+        //     // .attr("transform", ({ x, y, width, height }) => {
+        //     //     return attrs.layoutBindings[attrs.layout].nodeUpdateTransform({ x, y, width, height });
+
+        //     // })
+        //     .attr("opacity", 1);
 
         // Style node rectangles
         nodeUpdate
             .select(".node-rect")
-            .attr("width", function (d) {
-                if (d.data.parentId !== undefined) {
-                    return width;
-                } else {
-                    return height;
-                }
-            })//({ width }) => width)
+            .attr("width", ({ width }) => width)
             .attr("height", ({ height }) => height)
             .attr("x", ({ width }) => 0)
             .attr("y", ({ height }) => 0)
             .attr("cursor", "pointer")
             .attr('rx', function (d) {
-                if (d.data.parentId !== undefined) {
-                    return 3;
+                if (d.parent?.id == "invisible" && d._children?.length > 0) {
+                    return 80;
                 } else {
-                    return 100
+                    return 5;
                 }
             })
-            .attr("fill", '#1F2730')
+            .attr("fill", function (d) {
+                if (attrs.theme == "dark")
+                    return '#1F2730';
+                else
+                    return '#f2f4f5';
+            })
             .style("margin-left", 80)
         //attrs.nodeDefaultBackground)
 
@@ -1251,34 +1282,37 @@ class OrgChart {
             .style("width", ({ width }) => `${width}px`)
             .style("height", ({ height }) => `${height}px`)
             .html(function (d, i, arr) {
-                if (d.data._pagingButton) {
+                if (d.data?._pagingButton) {
                     return `<div class="paging-button-wrapper"><div style="pointer-events:none">${attrs.pagingButton(d, i, arr, attrs)}</div></div>`;
                 }
                 return attrs.nodeContent.bind(this)(d, i, arr, attrs)
             })
 
+        d3.selectAll(".node-foreign-object").on('mouseover', function (e, d) {
 
-        d3.selectAll(".node-additional-info").on('mouseover', function (d) {
-            console.log(this)
-            tippy(this);
+            if (d.data.attributes.tooltip == undefined)
+                return
 
-            let tip = this._tippy;
+            if (d.data.attributes.tooltip != "") {
 
-            tip.setProps({
-                allowHTML: true,
-                arrow: true,
-                theme: 'light',
-                placement: 'top',
-                maxWidth: '210px',
-                content: `
-                        <div > tooltip
-                        </div>
+                tippy(this);
+
+                let tip = this._tippy;
+
+                tip.setProps({
+                    allowHTML: true,
+                    arrow: true,
+                    theme: attrs.theme == 'dark' ? 'dark' : 'light',
+                    placement: 'top',
+                    maxWidth: '210px',
+                    content: `
+                        <div > ${d.data.attributes.tooltip}</div>
                         `});
 
-            tip.show()
-
+                tip.show()
+            }
         })
-            .on('mouseout', function (d) { let tip = this._tippy; tip.destroy() })
+            .on('mouseout', function (d) { let tip = this._tippy; if (tip != undefined) tip.destroy() })
     }
 
 
