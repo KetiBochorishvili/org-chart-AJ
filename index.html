@@ -4,8 +4,29 @@
 <script src="https://unpkg.com/tippy.js@5"></script>
 
 <script src="orgChart.js"></script>
+<div class="vis-container">
+  <div class="chart-container"></div>
 
-<div class="chart-container"></div>
+  <div class="action-buttons" style="display: flex; flex-direction: column;">
+    <button onclick="chart.zoomIn()" class="btn btn-action-button" style="height:30px;">
+      <i class="fas fa-plus"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M10.667 5.33366H6.66699V1.33366C6.66699 1.15685 6.59675 0.987279 6.47173 0.862254C6.34671 0.73723 6.17714 0.666992 6.00033 0.666992C5.82351 0.666992 5.65394 0.73723 5.52892 0.862254C5.4039 0.987279 5.33366 1.15685 5.33366 1.33366V5.33366H1.33366C1.15685 5.33366 0.987279 5.4039 0.862254 5.52892C0.73723 5.65394 0.666992 5.82351 0.666992 6.00033C0.666992 6.17714 0.73723 6.34671 0.862254 6.47173C0.987279 6.59675 1.15685 6.66699 1.33366 6.66699H5.33366V10.667C5.33366 10.8438 5.4039 11.0134 5.52892 11.1384C5.65394 11.2634 5.82351 11.3337 6.00033 11.3337C6.17714 11.3337 6.34671 11.2634 6.47173 11.1384C6.59675 11.0134 6.66699 10.8438 6.66699 10.667V6.66699H10.667C10.8438 6.66699 11.0134 6.59675 11.1384 6.47173C11.2634 6.34671 11.3337 6.17714 11.3337 6.00033C11.3337 5.82351 11.2634 5.65394 11.1384 5.52892C11.0134 5.4039 10.8438 5.33366 10.667 5.33366Z"
+            fill="#B7BDC7" />
+        </svg>
+      </i>
+    </button>
+    <button onclick="chart.zoomOut()" class="btn btn-action-button" style="height:30px; margin-top:3px;">
+      <i class="fas fa-minus"><svg width="12" height="2" viewBox="0 0 12 2" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M10.667 0.333008H1.33366C1.15685 0.333008 0.987279 0.403246 0.862254 0.52827C0.73723 0.653294 0.666992 0.822864 0.666992 0.999675C0.666992 1.17649 0.73723 1.34605 0.862254 1.47108C0.987279 1.5961 1.15685 1.66634 1.33366 1.66634H10.667C10.8438 1.66634 11.0134 1.5961 11.1384 1.47108C11.2634 1.34605 11.3337 1.17649 11.3337 0.999675C11.3337 0.822864 11.2634 0.653294 11.1384 0.52827C11.0134 0.403246 10.8438 0.333008 10.667 0.333008Z"
+            fill="#BFE8FF" />
+        </svg>
+      </i> </button>
+  </div>
+</div>
 <style>
   .node-foreign-object-dark {
     border: 1px solid #ffffff15;
@@ -23,34 +44,50 @@
 
   .tippy-tooltip.dark-theme {
     position: relative;
-    background-color: #232C36;
+    background-color: #313540;
     color: #fff;
     border-radius: 4px;
     font-size: 14px;
     line-height: 1.4;
     white-space: normal;
     outline: 0;
-    transition-property: transform, visibility, opacity
+    transition-property: transform, visibility, opacity;
+    border: 1px solid #484C58;
   }
 
   .tippy-tooltip.light-theme {
     position: relative;
-    background-color: #f2f4f5;
+    background-color: #E8EDF2;
     color: #8b9197;
     border-radius: 4px;
     font-size: 14px;
     line-height: 1.4;
     white-space: normal;
     outline: 0;
-    transition-property: transform, visibility, opacity
+    transition-property: transform, visibility, opacity;
+    border: 1px solid #9DA3B0;
   }
 
   .tippy-tooltip.dark-theme .tippy-arrow {
-    border-top: 7px solid #232C36;
+    border-left: 7px solid #484C58;
   }
 
   .tippy-tooltip.light-theme .tippy-arrow {
-    border-top: 7px solid #f2f4f5;
+    border-left: 7px solid #9DA3B0;
+  }
+
+  .btn-action-button {
+    cursor: pointer;
+    font-size: 11px !important;
+    border-radius: 7px !important;
+    color: white !important;
+    padding: 4px 5px !important;
+  }
+
+  .action-buttons {
+    position: absolute;
+    top: 40px;
+    right: 40px;
   }
 </style>
 <script>
@@ -62,6 +99,16 @@
       "children": null,
       "attributes": {
         "variant": "0"
+      }
+    },
+    {
+      "name": "unrelated node 2",
+      "id": 'un2',
+      "children": null,
+      "attributes": {
+        "variant": "0",
+        "tooltip": "Lorem ipsum dolor sit amet consectetur. Rhoncus erat tristique ipsum vestibulum felis cum. Consequat in nisl nec lectus ac eu elementum vitae. Tortor velit etiam nullam dictumst at euismod in mauris. In cras urna neque lacus posuere aliquet in morbi tortor. Lobortis sem lorem amet eu et dignissim. Egestas nunc at condimentum accumsan lorem.",
+        "dsc": "unrelated node description"
       }
     },
     {
@@ -770,29 +817,41 @@
         "dsc": "Lorem ipsum dolor sit amet consectetur. Rhoncus erat tristique ipsum vestibulum felis cum. Consequat in nisl nec lectus ac eu elementum vitae. Tortor velit etiam nullam dictumst at euismod in mauris. In cras urna neque lacus posuere aliquet in morbi tortor. Lobortis sem lorem amet eu et dignissim. Egestas nunc at condimentum accumsan lorem."
       }
     },
-
-    {
-      "name": "unrelated node 2",
-      "id": 'un2',
-      "children": null,
-      "attributes": {
-        "variant": "0",
-        "tooltip": "unrelated node tooltip",
-        "dsc": "unrelated node description"
-      }
-    }
   ]
 
+  let dataInitialSorted = [];
+  //sort initial array 
+
+  dataInitial.forEach((d) => {
+    if (dataInitialSorted.length > 0)
+      return
+    if (d.children == null) {
+      dataInitialSorted.push(d);
+    }
+  })
+
+  dataInitial.forEach((d) => {
+    if (d.children != null) {
+      dataInitialSorted.push(d);
+      return;
+    }
+  })
+
+  dataInitial.forEach((d) => {
+    if (!dataInitialSorted.includes(d)) {
+      dataInitialSorted.push(d);
+      return;
+    }
+  })
 
   let dataObject = {
     "name": "invisible",
     "id": 'invisible',
-    "children": dataInitial,
+    "children": dataInitialSorted,
     "attributes": {
       "variant": "0",
     }
   }
-
 
   dataObject.children[1].children[0]._expanded = 'true';
 
@@ -806,10 +865,6 @@
       return { ...copy, ...{ parentId } };
     })
 
-  // flattened.forEach(element => {
-  //   element.imageUrl = "example.png";
-  // });
-
   function getDescription(string) {
     if (string.length > 100)
       return string.slice(0, 100).concat('...');
@@ -817,17 +872,28 @@
       return string;
   }
 
-  let theme = "darkk";
+  let theme = "dark";
+
   var chart;
+
+  let colorsObject = {
+    lightBackground: "#ffffff",
+    lightNodeBackground: "#f2f4f5",
+    lightZoomButtonBackground: "#1d2643",
+    darkBackground: "#1C2228",
+    darkNodeBackground: "#1F2730",
+    darkZoomButtonBackground: " #1d2643",
+  }
 
   chart = new OrgChart()
     .container('.chart-container')
     .data(flattened)
     .theme(theme)
+    .colorsObject(colorsObject)
     .nodeContent(function (d) {
       return `<div style="font-size:14px;">
-          <div class='nodeImageNameContainer' style="height:${d.data.attributes.dsc ? "50%" : "100%"}; display:flex; flex-direction:row">
-            <div style="margin-left:${d.data.attributes.image ? '30px' : '0px'}; display:flex; justify-content:center; align-items:center;"> ${d.data.attributes.image ? d.data.attributes.image : ""} </div>
+          <div class='nodeImageNameContainer' style="height:${d.data.attributes.dsc ? "50%" : "100%"}; width:${d.data.attributes.image ? '70%' : '100%'}; display:flex; flex-direction:row">
+            <div style="margin-left:${d.data.attributes.image ? '20px' : '0px'}; display:flex; justify-content:center; align-items:center;"> ${d.data.attributes.image ? d.data.attributes.image : ""} </div>
             <div style="width:100%; display:flex; justify-content:center; align-items:center; font-size:16px; color:${theme == 'dark' ? '#f6f6f6' : '#3d4752'};">${d.data.name ? d.data.name : ""}</div>
             </div>
             <div style="text-align:center; margin-left:25px; margin-right:25px; color:${theme == 'dark' ? '#f6f6f67f' : '#8b9197'};">${d.data.attributes.dsc ? getDescription(d.data.attributes.dsc) : ""}</div>
@@ -835,8 +901,6 @@
 
     })
     .render();
-
-
 
   const url = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QMaAyMA1SdmlAAAAVRJREFUeNrt26FOw2AUhuFTElzrETNLMNPtJVRVVFbtlnYXKGQFqldANo3EoLDUITazzCxBTNBk53lv4M+XJ/ndKZ52L9uft9eP+Oeqbtgs8O7+cbWO36/PiIgmwd4ojsdIU9n2l7XzNBYZNj9Eos6oTRbcdMAZAwxYgAVYgAVYgAUYsAALsAALsAALMGABFmABFmABFmABBizAAqwFgZ/fv+slHl7q3aobNpn2proujIgo276ep/HgixZgARZgARZgAQYswAIswAIswAIswIAFWIAFWIAFWIABC7AAC7AAC7D+AHZdeN97XRf6ogVYgAVYgAVYgAELsAALsAALsAADFmABFmABFmABFmDAAizAAizAAqxrYNeF973XdaEvWoAFWIAFWIAFGLAAC7AAC7AACzBgARZgARZgARZgAQYswAIswAKsW0p1m1S2/WXtPI1Fhs0nxU1Jj2yxm2sAAAAASUVORK5CYII=`;
   const replaced = url.replace(/(\r\n|\n|\r)/gm);
@@ -847,31 +911,33 @@
     )
     .style(
       'background-image',
-      `url(${replaced}), radial-gradient(circle at center,${theme == "dark" ? '#1C2228' : '#ffffff'} 0, ${theme == "dark" ? '#1C2228' : '#ffffff'} 100%)`
+      `url(${replaced}), radial-gradient(circle at center,${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 0, ${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 100%)`
     );
 
 
-  d3.selectAll(".node-foreign-object").on('click', function (e, d) {
-    if (d.data.id != '1')
-      return
-    else {
-      if (theme == 'dark')
-        theme = 'light';
-      else
-        theme = 'dark';
-    }
+  // d3.selectAll(".node-foreign-object").on('click', function (e, d) {
+  //   if (d.data.id != '1')
+  //     return
+  //   else {
+  //     if (theme == 'dark')
+  //       theme = 'light';
+  //     else
+  //       theme = 'dark';
+  //   }
 
-    d3.select('.svg-chart-container')
-      .style(
-        'background',
-        'radial-gradient(circle at center, #04192B 0, #000B0E 100%) url("https://raw.githubusercontent.com/bumbeishvili/coronavirus.davidb.dev/master/glow.png")'
-      )
-      .style(
-        'background-image',
-        `url(${replaced}), radial-gradient(circle at center,${theme == "dark" ? '#1C2228' : '#ffffff'} 0, ${theme == "dark" ? '#1C2228' : '#ffffff'} 100%)`
-      );
+  //   d3.select('.svg-chart-container')
+  //     .style(
+  //       'background',
+  //       'radial-gradient(circle at center, #04192B 0, #000B0E 100%) url("https://raw.githubusercontent.com/bumbeishvili/coronavirus.davidb.dev/master/glow.png")'
+  //     )
+  //     .style(
+  //       'background-image',
+  //       `url(${replaced}), radial-gradient(circle at center,${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 0, ${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 100%)`
+  //     );
 
-    chart.theme(theme)
-      .render();
-  })
+  //   chart.theme(theme)
+  //     .render();
+  // })
 </script>
+<style>
+</style>

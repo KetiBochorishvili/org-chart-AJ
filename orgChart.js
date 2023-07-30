@@ -75,13 +75,7 @@ class OrgChart {
             * d=>d.data._centered - when node is centered
             */
             nodeContent: (d) => {
-                return `<div style="font-size:10px;">
-                <div class='nodeImageNameContainer' style="display:flex; flex-direction:row">
-                <img src=" ${d.data.imageUrl}" style="margin-top:10px;margin-left:30px;width:60px;height:60px;" />
-                  <div style="margin-left:20px; margin-top:20px; color:white;">${d.data.name}</div>
-                  </div>
-                  <div class="node-additional-info" style="font-size:16px; padding-top:20px; text-align:center; color:white;"> additional info </div>
-                </div>`
+                return `<div style="font-size:10px;"> </div>`
 
             },
 
@@ -437,6 +431,7 @@ class OrgChart {
                 },
             },
             theme: "dark",
+            colorsObject: {},
         };
 
         this.getChartState = () => attrs;
@@ -661,6 +656,10 @@ class OrgChart {
             attrs.firstDraw = false;
         }
 
+        d3.selectAll(".btn-action-button").style("background-color", function () {
+            if (attrs.theme == "dark") return colorsObject.darkZoomButtonBackground
+            else return colorsObject.lightZoomButtonBackground
+        })
         return this;
     }
 
@@ -828,7 +827,6 @@ class OrgChart {
         const links = treeData.descendants().slice(1);
         nodes.forEach(attrs.layoutBindings[attrs.layout].swap)
 
-        console.log(links)
         // Connections
         const connections = attrs.connections;
         const allNodesMap = {};
@@ -988,10 +986,6 @@ class OrgChart {
             .selectAll("g.node")
             .data(nodes, ({ data }) => attrs.nodeId(data));
 
-        // const unrelatedNodesSelection = attrs.nodesWrapper
-        //     .selectAll("g.unrelatedNode")
-        //     .data(attrs.unrelatedNodesData)
-
         // Enter any new nodes at the parent's previous position.
         const nodeEnter = nodesSelection
             .enter()
@@ -1043,7 +1037,7 @@ class OrgChart {
             .style('overflow', 'visible')
             .classed("node-foreign-object-dark", attrs.theme == "dark")
             .classed("node-foreign-object-light", attrs.theme == "light")
-            .classed("root-node", function (d) { console.log(d); return d.parent?.id == "invisible" && d._children?.length > 0 })
+            .classed("root-node", function (d) { return d.parent?.id == "invisible" && d._children?.length > 0 })
 
         // Add foreign object
         fo.patternify({
@@ -1115,21 +1109,6 @@ class OrgChart {
                     return 1;
             });
 
-        // unrelatedNodeUpdate
-        //     .transition()
-        //     .attr("opacity", 0)
-        //     .duration(attrs.duration)
-        //     .attr("transform", function (d, i) {
-        //         if (i == 0)
-        //             return `translate(${x0},${y0 - 100})`
-        //         else
-        //             return `translate(${x0},${y0 + 100})`
-        //     })
-        //     // .attr("transform", ({ x, y, width, height }) => {
-        //     //     return attrs.layoutBindings[attrs.layout].nodeUpdateTransform({ x, y, width, height });
-
-        //     // })
-        //     .attr("opacity", 1);
 
         // Style node rectangles
         nodeUpdate
@@ -1148,9 +1127,9 @@ class OrgChart {
             })
             .attr("fill", function (d) {
                 if (attrs.theme == "dark")
-                    return '#1F2730';
+                    return colorsObject.darkNodeBackground;
                 else
-                    return '#f2f4f5';
+                    return colorsObject.lightNodeBackground;
             })
             .style("margin-left", 80)
         //attrs.nodeDefaultBackground)
@@ -1303,8 +1282,8 @@ class OrgChart {
                     allowHTML: true,
                     arrow: true,
                     theme: attrs.theme == 'dark' ? 'dark' : 'light',
-                    placement: 'top',
-                    maxWidth: '210px',
+                    placement: 'left',
+                    maxWidth: '200px',
                     content: `
                         <div > ${d.data.attributes.tooltip}</div>
                         `});
