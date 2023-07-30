@@ -915,29 +915,29 @@
     );
 
 
-  // d3.selectAll(".node-foreign-object").on('click', function (e, d) {
-  //   if (d.data.id != '1')
-  //     return
-  //   else {
-  //     if (theme == 'dark')
-  //       theme = 'light';
-  //     else
-  //       theme = 'dark';
-  //   }
+  d3.selectAll(".node-foreign-object").on('click', function (e, d) {
+    if (d.data.id != '1')
+      return
+    else {
+      if (theme == 'dark')
+        theme = 'light';
+      else
+        theme = 'dark';
+    }
 
-  //   d3.select('.svg-chart-container')
-  //     .style(
-  //       'background',
-  //       'radial-gradient(circle at center, #04192B 0, #000B0E 100%) url("https://raw.githubusercontent.com/bumbeishvili/coronavirus.davidb.dev/master/glow.png")'
-  //     )
-  //     .style(
-  //       'background-image',
-  //       `url(${replaced}), radial-gradient(circle at center,${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 0, ${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 100%)`
-  //     );
+    d3.select('.svg-chart-container')
+      .style(
+        'background',
+        'radial-gradient(circle at center, #04192B 0, #000B0E 100%) url("https://raw.githubusercontent.com/bumbeishvili/coronavirus.davidb.dev/master/glow.png")'
+      )
+      .style(
+        'background-image',
+        `url(${replaced}), radial-gradient(circle at center,${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 0, ${theme == "dark" ? colorsObject.darkBackground : colorsObject.lightBackground} 100%)`
+      );
 
-  //   chart.theme(theme)
-  //     .render();
-  // })
+    chart.theme(theme)
+      .render();
+  })
 </script>
 <style>
 </style>
